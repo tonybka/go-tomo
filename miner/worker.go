@@ -274,6 +274,9 @@ func (self *worker) update() {
 				if self.config.Clique != nil && self.config.Clique.Period == 0 {
 					self.commitNewWork()
 				}
+				if self.config.Tomo != nil && self.config.Tomo.Period == 0 {
+					self.commitNewWork()
+				}
 			}
 
 		// System stopped
