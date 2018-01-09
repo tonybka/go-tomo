@@ -118,7 +118,7 @@ func (w *wizard) deployNode(boot bool) {
 				fmt.Printf("What address should the miner user? (default = %s)\n", infos.etherbase)
 				infos.etherbase = w.readDefaultAddress(common.HexToAddress(infos.etherbase)).Hex()
 			}
-		} else if w.conf.Genesis.Config.Clique != nil {
+		} else if w.conf.Genesis.Config.Clique != nil || w.conf.Genesis.Config.Tomo != nil {
 			// If a previous signer was already set, offer to reuse it
 			if infos.keyJSON != "" {
 				if key, err := keystore.DecryptKey([]byte(infos.keyJSON), infos.keyPass); err != nil {

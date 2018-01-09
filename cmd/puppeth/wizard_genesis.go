@@ -52,7 +52,7 @@ func (w *wizard) makeGenesis() {
 	fmt.Println("Which consensus engine to use? (default = clique)")
 	fmt.Println(" 1. Ethash - proof-of-work")
 	fmt.Println(" 2. Clique - proof-of-authority")
-	fmt.Println(" 2. Tomo - proof-of-stake")
+	fmt.Println(" 3. Tomo - proof-of-stake")
 
 	choice := w.read()
 	switch {
@@ -61,16 +61,28 @@ func (w *wizard) makeGenesis() {
 		genesis.Config.Ethash = new(params.EthashConfig)
 		genesis.ExtraData = make([]byte, 32)
 
-	case choice == "" || choice == "2":
+	case choice == "" || choice == "2" || choice == "3":
 		// In the case of clique, configure the consensus parameters
 		genesis.Difficulty = big.NewInt(1)
-		genesis.Config.Clique = &params.CliqueConfig{
-			Period: 15,
-			Epoch:  30000,
+		if choice == "2" {
+			genesis.Config.Clique = &params.CliqueConfig{
+				Period: 15,
+				Epoch:  30000,
+			}
+		}
+		if choice == "3" {
+			genesis.Config.Tomo = &params.TomoConfig{
+				Period: 15,
+				Epoch:  30000,
+			}
 		}
 		fmt.Println()
 		fmt.Println("How many seconds should blocks take? (default = 15)")
-		genesis.Config.Clique.Period = uint64(w.readDefaultInt(15))
+		if choice == "3" {
+			genesis.Config.Tomo.Period = uint64(w.readDefaultInt(15))
+		} else {
+			genesis.Config.Clique.Period = uint64(w.readDefaultInt(15))
+		}
 
 		// We also need the initial list of signers
 		fmt.Println()
